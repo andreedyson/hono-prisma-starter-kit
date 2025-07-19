@@ -1,9 +1,16 @@
 import { Hono } from "hono";
 import {
+  forgotPasswordValidator,
   loginValidator,
   registerValidator,
+  resetPasswordValidator,
 } from "../validators/auth.schema.js";
-import { loginUser, registerUser } from "../services/auth.service.js";
+import {
+  loginUser,
+  registerUser,
+  requestPasswordReset,
+  resetPassword,
+} from "../services/auth.service.js";
 import { cookieOptions } from "../utils/cookie.js";
 import { deleteCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
@@ -38,6 +45,18 @@ router.post("/logout", async (c) => {
   } catch {
     throw new HTTPException(500, { message: "Logout failed" });
   }
+});
+
+router.post("/forgot-password", forgotPasswordValidator, async (c) => {
+  const { email } = c.req.valid("json");
+  await requestPasswordReset(email);
+  return c.json({ message: "Reset email sent" }, 200);
+});
+
+router.post("/reset-password", resetPasswordValidator, async (c) => {
+  const { token, password } = c.req.valid("json");
+  await resetPassword(token, password);
+  return c.json({ message: "Password has been reset" });
 });
 
 export default router;

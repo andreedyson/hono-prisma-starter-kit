@@ -20,6 +20,8 @@ export const errorHandler = (err: unknown, c: Context) => {
     );
   }
 
+  console.log(err);
+
   // Default unexpected error
   return c.json({ message: "Internal Server Error" }, 500);
 };
