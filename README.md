@@ -162,7 +162,7 @@ The main endpoint is `http://localhost:8787` / `http://localhost:${PORT}`
 ---
 
 ## Credits 🙌
-- [**Hono**](https://www.hono.dev/) – A  small, simple, and ultrafast web framework built on Web Standards.
+- [**Hono**](https://hono.dev/) – A  small, simple, and ultrafast web framework built on Web Standards.
 - [**Prisma**](https://www.prisma.io/) – Next generation ORM for TypeScript with powerful query and type safety.
 - [**Zod**](https://www.zod.dev/) – TypeScript-first schema validation with static type inference.
 
