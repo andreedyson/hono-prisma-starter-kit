@@ -4,6 +4,7 @@ import { z } from "zod";
 dotenv.config();
 
 const envSchema = z.object({
+  DATABASE_URL: z.string("DATABASE URL is required"),
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
