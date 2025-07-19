@@ -1,6 +1,6 @@
 import { sign, verify } from "hono/jwt";
 import type { JWTPayload } from "hono/utils/jwt/types";
-import { JWT_SECRET, RESET_SECRET } from "../configs/constants.js";
+import { env } from "../configs/env.js";
 
 interface CustomPayload extends JWTPayload {
   id: string;
@@ -14,11 +14,11 @@ export const generateToken = async (payload: CustomPayload) => {
     sub: payload.id,
     exp: Math.floor(Date.now() / 1000) + 1 * 60 * 60, // Expires in 1hr
   };
-  return await sign(data, JWT_SECRET);
+  return await sign(data, env.JWT_SECRET);
 };
 
 export const verifyToken = async (token: string) => {
-  return (await verify(token, JWT_SECRET)) as CustomPayload;
+  return (await verify(token, env.JWT_SECRET)) as CustomPayload;
 };
 
 export const generateResetToken = async (payload: CustomPayload) => {
@@ -27,9 +27,9 @@ export const generateResetToken = async (payload: CustomPayload) => {
     sub: payload.id,
     exp: Math.floor(Date.now() / 1000) + 15 * 60, // Expires in 15m
   };
-  return await sign(data, RESET_SECRET);
+  return await sign(data, env.JWT_RESET_SECRET);
 };
 
 export const verifyResetToken = async (token: string) => {
-  return (await verify(token, RESET_SECRET)) as CustomPayload;
+  return (await verify(token, env.JWT_RESET_SECRET)) as CustomPayload;
 };

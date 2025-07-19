@@ -3,9 +3,10 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import { prettyJSON } from "hono/pretty-json";
-import authRoutes from "./routes/auth.route.js";
-import { errorHandler } from "./middlewares/error.middleware.js";
+import { env } from "./configs/env.js";
 import { authMiddleware } from "./middlewares/auth.middleware.js";
+import { errorHandler } from "./middlewares/error.middleware.js";
+import authRoutes from "./routes/auth.route.js";
 
 const app = new Hono();
 
@@ -29,7 +30,7 @@ app.onError(errorHandler);
 serve(
   {
     fetch: app.fetch,
-    port: 8787,
+    port: env.PORT,
   },
   (info) => {
     console.log(`Server is running on http://localhost:${info.port}`);
