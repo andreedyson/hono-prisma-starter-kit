@@ -4,12 +4,13 @@ generator client {
 
 datasource db {
   // Adjust as needed, can use MySQL or PostgreSQL
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
   id        String   @id @default(uuid())
+  name      String
   email     String   @unique
   password  String
   createdAt DateTime @default(now())

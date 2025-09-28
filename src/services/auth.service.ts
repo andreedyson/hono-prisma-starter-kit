@@ -6,13 +6,13 @@ import {
   generateToken,
   verifyResetToken,
 } from "../utils/token.js";
-import type { AuthProps } from "../validators/auth.schema.js";
+import type { LoginProps, RegisterProps } from "../validators/auth.schema.js";
 import type { Context } from "hono";
 import { setCookie } from "hono/cookie";
 import { cookieOptions } from "../utils/cookie.js";
 import { sendResetPasswordEmail } from "../utils/email.js";
 
-export const registerUser = async (data: AuthProps) => {
+export const registerUser = async (data: RegisterProps) => {
   try {
     // Check if user exists
     const userExists = await prisma.user.findUnique({
@@ -25,11 +25,11 @@ export const registerUser = async (data: AuthProps) => {
       throw new HTTPException(409, { message: "User already exists" });
     }
 
-    const hashedPassword = await bcrypt.hash(data.password, 12);
-
     // Create new user data
+    const hashedPassword = await bcrypt.hash(data.password, 12);
     const newUser = await prisma.user.create({
       data: {
+        name: data.name,
         email: data.email,
         password: hashedPassword,
       },
@@ -43,7 +43,7 @@ export const registerUser = async (data: AuthProps) => {
   }
 };
 
-export const loginUser = async (c: Context, data: AuthProps) => {
+export const loginUser = async (c: Context, data: LoginProps) => {
   try {
     // Check user data
     const user = await prisma.user.findUnique({
@@ -69,6 +69,7 @@ export const loginUser = async (c: Context, data: AuthProps) => {
     // Generate JWT Token using the payload
     const payload = {
       id: user.id,
+      name: user.name,
       email: user.email,
       createdAt: user.createdAt,
     };

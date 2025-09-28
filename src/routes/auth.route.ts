@@ -26,6 +26,7 @@ router.post("/register", registerValidator, async (c) => {
     message: "Successfully registered",
     user: {
       id: user.id,
+      name: user.name,
       email: user.email,
     },
   });

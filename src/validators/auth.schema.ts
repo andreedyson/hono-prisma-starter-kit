@@ -2,7 +2,9 @@ import { zValidator } from "@hono/zod-validator";
 import z from "zod";
 
 export const registerSchema = z.object({
-  // TODO: Add a name field
+  name: z
+    .string({ error: "Name is requried" })
+    .min(1, { error: "Name is required" }),
   email: z.email({ error: "Invalid email" }),
   password: z
     .string({ error: "Password is required" })
@@ -24,7 +26,8 @@ export const resetPasswordSchema = z.object({
 });
 
 /* ========== TYPE INFER FROM SCHEMA  ========== */
-export type AuthProps = z.infer<typeof registerSchema | typeof loginSchema>;
+export type RegisterProps = z.infer<typeof registerSchema>;
+export type LoginProps = z.infer<typeof loginSchema>;
 export type ForgotPasswordProps = z.infer<typeof forgotPasswordSchema>;
 export type ResetPasswordProps = z.infer<typeof resetPasswordSchema>;
 
