@@ -11,7 +11,13 @@ export const authMiddleware: MiddlewareHandler = async (c, next) => {
 
   try {
     const decoded = await verifyToken(token);
-    c.set("jwtPayload", decoded);
+    c.set("auth", decoded);
+
+    // Enable If You Need RBAC
+    //  if (allowedRoles && !allowedRoles.includes(decoded.role as UserRole)) {
+    //    return c.json({ message: "Unauthorized ROle" }, 403);
+    //  }
+
     await next();
   } catch (error) {
     return c.json({ message: "Invalid or expired token" }, 401);
