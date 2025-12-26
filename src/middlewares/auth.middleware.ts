@@ -15,7 +15,7 @@ export const authMiddleware: MiddlewareHandler = async (c, next) => {
 
     // Enable If You Need RBAC
     //  if (allowedRoles && !allowedRoles.includes(decoded.role as UserRole)) {
-    //    return c.json({ message: "Unauthorized ROle" }, 403);
+    //    return c.json({ message: "Unauthorized Role" }, 403);
     //  }
 
     await next();

@@ -1,6 +1,5 @@
 import bcrypt from "bcryptjs";
 import { HTTPException } from "hono/http-exception";
-import prisma from "../db/prisma.js";
 import {
   generateResetToken,
   generateToken,
@@ -11,6 +10,7 @@ import type { Context } from "hono";
 import { setCookie } from "hono/cookie";
 import { cookieOptions } from "../utils/cookie.js";
 import { sendResetPasswordEmail } from "../utils/email.js";
+import { prisma } from "../db/prisma.js";
 
 export const registerUser = async (data: RegisterProps) => {
   try {
