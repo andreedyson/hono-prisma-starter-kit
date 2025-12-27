@@ -91,6 +91,7 @@ JWT_RESET_SECRET=your-reset-password-jwt-secret
 RESEND_API_KEY=resend-api-key
 RESEND_FROM=test@example.com
 PORT="8787"
+ADMIN_PASSWORD="your-admin-password-here"
 ```
 
 ### 4. Setup the database
