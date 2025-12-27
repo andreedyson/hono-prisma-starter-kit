@@ -29,6 +29,10 @@ const envSchema = z.object({
     .string({ error: "JWT_RESET_SECRET is required" })
     .min(10, "JWT_RESET_SECRET must be at least 10 characters"),
 
+  ADMIN_PASSWORD: z
+    .string({ error: "ADMIN_PASSWORD is required" })
+    .min(8, "ADMIN_PASSWORD must be at least 8 characters"),
+
   // Resend Email
   RESEND_API_KEY: z
     .string({ error: "RESEND_API_KEY is required" })
