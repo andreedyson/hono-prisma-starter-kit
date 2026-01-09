@@ -121,3 +121,20 @@ export const resetPassword = async (token: string, password: string) => {
     throw new HTTPException(400, { message: "Invalid or expired token" });
   }
 };
+
+export const getCurrentUser = async (userId: string) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      omit: {
+        password: true,
+      },
+    });
+
+    return user;
+  } catch (error) {
+    throw new HTTPException(400, { message: "Gagal mendapatkan data user" });
+  }
+};
