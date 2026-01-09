@@ -18,6 +18,7 @@ async function main() {
       name: "Admin",
       email: "admin@gmail.com",
       password: env.ADMIN_PASSWORD,
+      role: "ADMIN",
     },
     select: {
       name: true,
