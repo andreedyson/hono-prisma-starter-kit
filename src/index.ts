@@ -22,7 +22,7 @@ app.get("/api/me", authMiddleware, async (c) => {
 });
 
 app.get("/", (c) => {
-  return c.text("Hello Hono!");
+  return c.text("Hello Hono Prisma + PostgreSQL Starter Kit !");
 });
 
 app.onError(errorHandler);
