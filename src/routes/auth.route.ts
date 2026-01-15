@@ -10,7 +10,7 @@ import {
   requestPasswordReset,
   resetPassword,
 } from "../services/auth.service.js";
-import { cookieOptions } from "../utils/cookie.js";
+import { cookieOptions } from "../lib/cookie.js";
 import {
   forgotPasswordSchema,
   loginSchema,

@@ -4,12 +4,12 @@ import {
   generateResetToken,
   generateToken,
   verifyResetToken,
-} from "../utils/token.js";
+} from "../lib/token.js";
 import type { LoginProps, RegisterProps } from "../validators/auth.schema.js";
 import type { Context } from "hono";
 import { setCookie } from "hono/cookie";
-import { cookieOptions } from "../utils/cookie.js";
-import { sendResetPasswordEmail } from "../utils/email.js";
+import { cookieOptions } from "../lib/cookie.js";
+import { sendResetPasswordEmail } from "../lib/email.js";
 import { prisma } from "../db/prisma.js";
 
 export const registerUser = async (data: RegisterProps) => {

@@ -1,5 +1,5 @@
 import type { MiddlewareHandler } from "hono";
-import { verifyToken } from "../utils/token.js";
+import { verifyToken } from "../lib/token.js";
 
 export const authMiddleware: MiddlewareHandler = async (c, next) => {
   const authHeader = c.req.header("Authorization");
