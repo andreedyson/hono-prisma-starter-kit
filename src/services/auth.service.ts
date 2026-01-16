@@ -63,7 +63,7 @@ export const loginUser = async (c: Context, data: LoginProps) => {
     );
 
     if (!isPasswordCorrect) {
-      throw new HTTPException(401, { message: "Invalid credentials provided" });
+      throw new HTTPException(400, { message: "Invalid credentials provided" });
     }
 
     // Generate JWT Token using the payload
