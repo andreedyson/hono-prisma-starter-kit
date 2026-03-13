@@ -8,9 +8,25 @@ import {
 import type { LoginProps, RegisterProps } from "../validators/auth.schema.js";
 import type { Context } from "hono";
 import { setCookie } from "hono/cookie";
-import { cookieOptions } from "../lib/cookie.js";
+import { AUTH_COOKIE_NAME, cookieOptions } from "../lib/cookie.js";
 import { sendResetPasswordEmail } from "../lib/email.js";
 import { prisma } from "../db/prisma.js";
+import type { UserRole } from "../../prisma/generated/prisma/enums.js";
+
+const buildAuthPayload = (user: {
+  id: string;
+  email: string;
+  createdAt: Date;
+  tokenVersion: number;
+  role: UserRole;
+}) => ({
+  id: user.id,
+  email: user.email,
+  fullName: "Name", // Adjust with how you want to approach name retrieval
+  role: user.role,
+  createdAt: user.createdAt,
+  tokenVersion: user.tokenVersion,
+});
 
 export const registerUser = async (data: RegisterProps) => {
   try {
@@ -59,7 +75,7 @@ export const loginUser = async (c: Context, data: LoginProps) => {
     // Check is password correct
     const isPasswordCorrect = await bcrypt.compare(
       data.password,
-      user.password
+      user.password,
     );
 
     if (!isPasswordCorrect) {
@@ -67,19 +83,12 @@ export const loginUser = async (c: Context, data: LoginProps) => {
     }
 
     // Generate JWT Token using the payload
-    const payload = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      createdAt: user.createdAt,
-    };
-
+    const payload = buildAuthPayload(user);
     const token = await generateToken(payload);
-
     // Set cookie with httpOnly option
-    setCookie(c, "authToken", token, cookieOptions);
+    setCookie(c, AUTH_COOKIE_NAME, token, cookieOptions);
 
-    return { user: payload, token };
+    return { user: payload };
   } catch (error) {
     if (error instanceof HTTPException) throw error;
     console.error("Unexpected error:", error);

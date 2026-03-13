@@ -10,6 +10,12 @@ const envSchema = z.object({
     })
     .min(1, "DATABASE_URL is required"),
 
+  FRONTEND_URL: z
+    .string({
+      error: "FRONTEND_URL is required",
+    })
+    .min(1, "FRONTEND_URL is required"),
+
   NODE_ENV: z
     .enum(["development", "production", "test"])
     .default("development"),
@@ -24,6 +30,10 @@ const envSchema = z.object({
   JWT_SECRET: z
     .string({ error: "JWT_SECRET is required" })
     .min(10, "JWT_SECRET must be at least 10 characters"),
+
+  JWT_VERIFY_SECRET: z
+    .string({ error: "JWT_VERIFY_SECRET is required" })
+    .min(10, "JWT_VERIFY_SECRET must be at least 10 characters"),
 
   JWT_RESET_SECRET: z
     .string({ error: "JWT_RESET_SECRET is required" })

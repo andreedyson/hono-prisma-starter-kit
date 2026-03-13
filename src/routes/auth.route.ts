@@ -37,9 +37,9 @@ router.post("/register", zodValidator("json", registerSchema), async (c) => {
 
 router.post("/login", zodValidator("json", loginSchema), async (c) => {
   const payload = c.req.valid("json");
-  const { user, token } = await loginUser(c, payload);
+  const { user } = await loginUser(c, payload);
 
-  return c.json({ message: "Login Successful", data: { user, token } }, 200);
+  return c.json({ message: "Login Successful", data: { user } }, 200);
 });
 
 router.post("/logout", async (c) => {
@@ -58,7 +58,7 @@ router.post(
     const { email } = c.req.valid("json");
     await requestPasswordReset(email);
     return c.json({ message: "Reset email sent" }, 200);
-  }
+  },
 );
 
 router.post(
@@ -68,10 +68,10 @@ router.post(
     const { token, password } = c.req.valid("json");
     await resetPassword(token, password);
     return c.json({ message: "Password has been reset" });
-  }
+  },
 );
 
-router.get("/me", authMiddleware, async (c) => {
+router.get("/me", authMiddleware(), async (c) => {
   const auth = c.get("auth");
 
   const user = await getCurrentUser(auth.id);
