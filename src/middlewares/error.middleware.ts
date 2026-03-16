@@ -1,8 +1,13 @@
 import type { Context } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { ZodError } from "zod";
+import { AppError } from "../lib/app-error";
 
 export const errorHandler = (err: unknown, c: Context) => {
+  if (err instanceof AppError) {
+    return c.json({ message: err.message }, err.statusCode);
+  }
+
   if (err instanceof HTTPException) {
     const message = err.message || "Something went wrong";
     const errors = err.cause;
@@ -16,7 +21,7 @@ export const errorHandler = (err: unknown, c: Context) => {
         message: "Validation failed",
         errors: err.issues,
       },
-      400
+      400,
     );
   }
 
