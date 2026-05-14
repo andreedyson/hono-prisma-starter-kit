@@ -1,6 +1,7 @@
 import { PrismaPg } from "@prisma/adapter-pg";
 import { env } from "../src/configs/env";
 import { PrismaClient } from "./generated/prisma/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: env.DATABASE_URL }),
@@ -17,7 +18,7 @@ async function main() {
     create: {
       name: "Admin",
       email: "admin@gmail.com",
-      password: env.ADMIN_PASSWORD,
+      password: await bcrypt.hash(env.ADMIN_PASSWORD, 12),
       role: "ADMIN",
     },
     select: {

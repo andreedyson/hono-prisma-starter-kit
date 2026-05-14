@@ -18,7 +18,7 @@ import {
   resetPasswordSchema,
 } from "../validators/auth.schema.js";
 
-const router = new Hono().basePath("/api");
+const router = new Hono();
 
 router.post("/register", zodValidator("json", registerSchema), async (c) => {
   const payload = c.req.valid("json");

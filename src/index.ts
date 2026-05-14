@@ -25,7 +25,7 @@ app.use(
 app.use("*", logger());
 app.use("*", prettyJSON());
 
-app.route("/", authRoutes);
+app.route("/api/auth", authRoutes);
 app.get("/api/me", authMiddleware(), async (c) => {
   const user = c.get("jwtPayload");
 

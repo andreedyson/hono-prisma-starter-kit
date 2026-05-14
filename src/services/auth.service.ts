@@ -9,9 +9,9 @@ import type { LoginProps, RegisterProps } from "../validators/auth.schema.js";
 import type { Context } from "hono";
 import { setCookie } from "hono/cookie";
 import { AUTH_COOKIE_NAME, cookieOptions } from "../lib/cookie.js";
-import { sendResetPasswordEmail } from "../lib/email.js";
 import { prisma } from "../db/prisma.js";
 import type { UserRole } from "../../prisma/generated/prisma/enums.js";
+import { sendResetPasswordEmail } from "../lib/emails/email.js";
 
 const buildAuthPayload = (user: {
   id: string;
@@ -77,6 +77,8 @@ export const loginUser = async (c: Context, data: LoginProps) => {
       data.password,
       user.password,
     );
+
+    console.log("first", isPasswordCorrect);
 
     if (!isPasswordCorrect) {
       throw new HTTPException(400, { message: "Invalid credentials provided" });
