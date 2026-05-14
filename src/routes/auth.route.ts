@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { deleteCookie } from "hono/cookie";
 import { HTTPException } from "hono/http-exception";
 import { zodValidator } from "../lib/validator.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";

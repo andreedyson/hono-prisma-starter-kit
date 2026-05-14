@@ -150,12 +150,11 @@ export const getCurrentUser = async (userId: string) => {
 
 export const logoutUser = (c: Context) => {
   try {
-    setCookie(c, AUTH_COOKIE_NAME, "", {
-      path: "/",
-      maxAge: 0,
+    deleteCookie(c, AUTH_COOKIE_NAME, {
+      path: cookieOptions.path,
       secure: cookieOptions.secure,
       sameSite: cookieOptions.sameSite,
-      httpOnly: true,
+      httpOnly: cookieOptions.httpOnly,
     });
     return true;
   } catch (error) {
