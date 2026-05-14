@@ -6,6 +6,7 @@ import { authMiddleware } from "../middlewares/auth.middleware.js";
 import {
   getCurrentUser,
   loginUser,
+  logoutUser,
   registerUser,
   requestPasswordReset,
   resetPassword,
@@ -43,12 +44,8 @@ router.post("/login", zodValidator("json", loginSchema), async (c) => {
 });
 
 router.post("/logout", async (c) => {
-  try {
-    deleteCookie(c, "authToken", cookieOptions);
-    return c.json({ message: "Logout successful" });
-  } catch {
-    throw new HTTPException(500, { message: "Logout failed" });
-  }
+  logoutUser(c);
+  return c.json({ message: "Logout successful" });
 });
 
 router.post(

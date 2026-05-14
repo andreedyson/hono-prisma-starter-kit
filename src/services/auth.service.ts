@@ -7,7 +7,7 @@ import {
 } from "../lib/token.js";
 import type { LoginProps, RegisterProps } from "../validators/auth.schema.js";
 import type { Context } from "hono";
-import { setCookie } from "hono/cookie";
+import { deleteCookie, setCookie } from "hono/cookie";
 import { AUTH_COOKIE_NAME, cookieOptions } from "../lib/cookie.js";
 import { prisma } from "../db/prisma.js";
 import type { UserRole } from "../../prisma/generated/prisma/enums.js";
@@ -78,8 +78,6 @@ export const loginUser = async (c: Context, data: LoginProps) => {
       user.password,
     );
 
-    console.log("first", isPasswordCorrect);
-
     if (!isPasswordCorrect) {
       throw new HTTPException(400, { message: "Invalid credentials provided" });
     }
@@ -147,5 +145,14 @@ export const getCurrentUser = async (userId: string) => {
     return user;
   } catch (error) {
     throw new HTTPException(400, { message: "Gagal mendapatkan data user" });
+  }
+};
+
+export const logoutUser = (c: Context) => {
+  try {
+    deleteCookie(c, AUTH_COOKIE_NAME, cookieOptions);
+    return true;
+  } catch (error) {
+    throw new HTTPException(500, { message: "Logout failed" });
   }
 };
