@@ -24,7 +24,7 @@ export const authMiddleware = (
     const token = getRequestToken(authHeader, authCookie);
 
     if (!token) {
-      return c.json({ message: "Akses tidak diizinkan" }, 401);
+      return c.json({ message: "Unauthorized" }, 401);
     }
 
     try {
@@ -35,28 +35,25 @@ export const authMiddleware = (
       });
 
       if (!user) {
-        return c.json({ message: "Akses tidak diizinkan" }, 401);
+        return c.json({ message: "Unauthorized" }, 401);
       }
 
       if (
         typeof decoded.tokenVersion !== "number" ||
         user.tokenVersion !== decoded.tokenVersion
       ) {
-        return c.json({ message: "Token tidak valid atau kadaluarsa" }, 401);
+        return c.json({ message: "Invalid or expired token" }, 401);
       }
 
       c.set("auth", { ...decoded, role: user.role });
 
       if (allowedRoles && !allowedRoles.includes(user.role as UserRole)) {
-        return c.json(
-          { message: "Anda tidak memiliki akses untuk data ini" },
-          403,
-        );
+        return c.json({ message: "Forbidden" }, 403);
       }
 
       await next();
-    } catch (error) {
-      return c.json({ message: "Token tidak valid atau kadaluarsa" }, 401);
+    } catch (_error) {
+      return c.json({ message: "Invalid or expired token" }, 401);
     }
   };
 };

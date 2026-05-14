@@ -1,5 +1,5 @@
 import "hono";
-import type { CustomPayload } from "../utils/token.ts";
+import type { CustomPayload } from "../lib/token.ts";
 
 declare module "hono" {
   interface ContextVariableMap {

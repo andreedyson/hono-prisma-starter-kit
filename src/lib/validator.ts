@@ -7,14 +7,14 @@ type Hook<TOut, E extends Env, P extends string> = (
   result:
     | { success: true; data: TOut }
     | { success: false; error: ZodError; data: unknown },
-  c: Context<E, P>
+  c: Context<E, P>,
 ) => Response | void | Promise<Response | void> | { response: Response };
 
 export function zodValidator<
   TSchema extends ZodTypeAny,
   Target extends keyof ValidationTargets,
   E extends Env = Env,
-  P extends string = string
+  P extends string = string,
 >(target: Target, schema: TSchema, hook?: Hook<z.output<TSchema>, E, P>) {
   return validator(target, async (value, c) => {
     const parsed = await schema.safeParseAsync(value);
@@ -24,7 +24,7 @@ export function zodValidator<
         parsed.success
           ? { success: true, data: parsed.data }
           : { success: false, error: parsed.error, data: value },
-        c
+        c,
       );
 
       if (hookResult) {

@@ -11,9 +11,9 @@ export interface CustomPayload extends JWTPayload {
   tokenVersion?: number;
 }
 
-export const ACCESS_TOKEN_TTL = 6 * 60 * 60; // Expires dalam 6 jam
-const RESET_TOKEN_TTL = 15 * 60; // Expires 15 menit
-const VERIFY_EMAIL_TOKEN_TTL = 24 * 60 * 60; // Expires 24 jam
+export const ACCESS_TOKEN_TTL = 6 * 60 * 60; // 6 hour TTL
+const RESET_TOKEN_TTL = 15 * 60; // 15 minute TTL
+const VERIFY_EMAIL_TOKEN_TTL = 24 * 60 * 60; // 24 hour TTL
 
 export const generateToken = async (payload: CustomPayload) => {
   const data = {

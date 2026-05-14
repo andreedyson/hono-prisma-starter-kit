@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { HTTPException } from "hono/http-exception";
 import { zodValidator } from "../lib/validator.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 import {
@@ -10,7 +9,6 @@ import {
   requestPasswordReset,
   resetPassword,
 } from "../services/auth.service.js";
-import { cookieOptions } from "../lib/cookie.js";
 import {
   forgotPasswordSchema,
   loginSchema,

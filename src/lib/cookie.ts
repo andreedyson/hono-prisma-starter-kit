@@ -14,5 +14,5 @@ export const cookieOptions = {
   path: "/",
   secure: env.NODE_ENV === "production",
   sameSite: "lax",
-  maxAge: ACCESS_TOKEN_TTL, // 1hr
+  maxAge: ACCESS_TOKEN_TTL, // 6hr
 } as CookieOptions;

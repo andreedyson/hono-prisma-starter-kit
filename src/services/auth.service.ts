@@ -15,6 +15,7 @@ import { sendResetPasswordEmail } from "../lib/emails/email.js";
 
 const buildAuthPayload = (user: {
   id: string;
+  name: string;
   email: string;
   createdAt: Date;
   tokenVersion: number;
@@ -22,7 +23,7 @@ const buildAuthPayload = (user: {
 }) => ({
   id: user.id,
   email: user.email,
-  fullName: "Name", // Adjust with how you want to approach name retrieval
+  fullName: user.name,
   role: user.role,
   createdAt: user.createdAt,
   tokenVersion: user.tokenVersion,
@@ -126,7 +127,7 @@ export const resetPassword = async (token: string, password: string) => {
         password: newHashedPassword,
       },
     });
-  } catch (error) {
+  } catch (_error) {
     throw new HTTPException(400, { message: "Invalid or expired token" });
   }
 };
@@ -143,8 +144,8 @@ export const getCurrentUser = async (userId: string) => {
     });
 
     return user;
-  } catch (error) {
-    throw new HTTPException(400, { message: "Gagal mendapatkan data user" });
+  } catch (_error) {
+    throw new HTTPException(400, { message: "Failed to retrieve user data" });
   }
 };
 
@@ -157,7 +158,7 @@ export const logoutUser = (c: Context) => {
       httpOnly: cookieOptions.httpOnly,
     });
     return true;
-  } catch (error) {
+  } catch (_error) {
     throw new HTTPException(500, { message: "Logout failed" });
   }
 };

@@ -49,9 +49,7 @@ function safeJoinUploadsRoot(subPath?: string) {
   const targetAbs = normalize(join(rootAbs, subPath ?? ""));
 
   if (!targetAbs.startsWith(rootAbs)) {
-    throw new Error(
-      "Path tidak valid: harus tetap berada di direktori uploads",
-    );
+    throw new Error("Invalid path: must remain within the uploads directory");
   }
   return targetAbs;
 }
@@ -76,7 +74,7 @@ function assertEnoughDiskSpace(targetDirAbs: string, minFreeBytes: number) {
     const freeMB = Math.floor(freeBytes / 1024 / 1024);
     const neededMB = Math.floor(minFreeBytes / 1024 / 1024);
     throw new Error(
-      `Storage hampir penuh. Free: ~${freeMB}MB, butuh minimal ~${neededMB}MB`,
+      `Insufficient storage. Free: ~${freeMB}MB, minimum required: ~${neededMB}MB`,
     );
   }
 }
@@ -92,7 +90,7 @@ export const writeFilesIntoStatic = async (
   ensureDir(UPLOADS_ROOT);
 
   if (options?.path && !options.path.startsWith("/")) {
-    throw new Error("Path harus diawali dengan '/'");
+    throw new Error("Path must start with '/'");
   }
 
   // Convert "/modul/materi" -> "modul/materi"
@@ -160,33 +158,33 @@ export const validateSingleFileSchema = ({
 }: ValidateFileOptions) =>
   z
     .custom<File>((val) => val instanceof File && !!(val as File).name, {
-      message: "File tidak valid",
+      message: "Invalid file",
     })
     .refine((file) => file.size <= maxSizeInBytes, {
-      message: `Ukuran file maksimal ${Math.round(maxSizeInBytes / 1024 / 1024)}MB`,
+      message: `File size must not exceed ${Math.round(maxSizeInBytes / 1024 / 1024)}MB`,
     })
     .refine(
       (file) =>
         allowedExtensions.some((ext) =>
           file.name.toLowerCase().endsWith(`.${ext.toLowerCase()}`),
         ),
-      { message: `Format file harus ${allowedExtensions.join(", ")}` },
+      { message: `Allowed file formats: ${allowedExtensions.join(", ")}` },
     )
     .refine(
       (file) => !allowedMimeTypes || allowedMimeTypes.includes(file.type),
-      { message: "Tipe file tidak valid" },
+      { message: "Invalid file type" },
     );
 
 export const validateMultiFileSchema = (options: ValidateFileOptions) =>
   z.preprocess(
-    (val) => (val instanceof File ? [val] : val), // kalau 1 file → ubah jadi array
+    (val) => (val instanceof File ? [val] : val), // normalize single File to array
     z
       .array(validateSingleFileSchema(options))
       .min(options.minFiles ?? 1, {
-        message: `Minimal ${options.minFiles ?? 1} file`,
+        message: `At least ${options.minFiles ?? 1} file required`,
       })
       .max(options.maxFiles ?? 10, {
-        message: `Maksimal ${options.maxFiles ?? 10} file`,
+        message: `At most ${options.maxFiles ?? 10} files allowed`,
       }),
   );
 

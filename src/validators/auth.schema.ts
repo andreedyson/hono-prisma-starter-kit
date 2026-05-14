@@ -1,16 +1,15 @@
-import { zValidator } from "@hono/zod-validator";
 import z from "zod";
 
 export const registerSchema = z.object({
   name: z
-    .string({ error: "Name is requried" })
+    .string({ error: "Name is required" })
     .min(1, { error: "Name is required" }),
   email: z.email({ error: "Invalid email" }),
   password: z
     .string({ error: "Password is required" })
     .min(6, { error: "Password must be at least 6 characters" })
     .max(32, {
-      error: "Password should be less than or equal to 32 chracters",
+      error: "Password must be at most 32 characters",
     }),
 });
 export const loginSchema = registerSchema.pick({ email: true, password: true });
@@ -21,7 +20,7 @@ export const resetPasswordSchema = z.object({
     .string({ error: "Password is required" })
     .min(6, { error: "Password must be at least 6 characters" })
     .max(32, {
-      error: "Password should be less than or equal to 32 chracters",
+      error: "Password must be at most 32 characters",
     }),
 });
 
