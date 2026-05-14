@@ -150,7 +150,12 @@ export const getCurrentUser = async (userId: string) => {
 
 export const logoutUser = (c: Context) => {
   try {
-    deleteCookie(c, AUTH_COOKIE_NAME, cookieOptions);
+    deleteCookie(c, AUTH_COOKIE_NAME, {
+      path: cookieOptions.path,
+      secure: cookieOptions.secure,
+      sameSite: cookieOptions.sameSite,
+      httpOnly: cookieOptions.httpOnly,
+    });
     return true;
   } catch (error) {
     throw new HTTPException(500, { message: "Logout failed" });
